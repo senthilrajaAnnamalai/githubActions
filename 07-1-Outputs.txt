@@ -1,0 +1,28 @@
+name: demo_outputs
+on: workflow_dispatch
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    outputs:
+      jobOutput: ${{ steps.osname.outputs.my_var }}
+    steps:
+      - name: "Get OS Name"
+        id: osname
+        run: |
+          my_var=$(uname -r)
+          echo "Output [$my_var]"
+          echo "my_var=$my_var" >> $GITHUB_OUTPUT 
+      - name: "output call between steps"
+        run: |
+          echo "Output [${{steps.osname.outputs.my_var}}]"
+      - name: End-Workflow
+        run: echo "Execution is completed"    
+  second-job:
+    runs-on: ubuntu-latest
+    needs: first-job
+    steps:
+      - name: "output call between jobs"
+        run: |
+          echo "Output [${{needs.first-job.outputs.jobOutput}}]"
+      - name: End-Workflow
+        run: echo "Execution is completed"    
