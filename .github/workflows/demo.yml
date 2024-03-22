@@ -10,4 +10,4 @@ jobs:
           sudo apt-get install figlet
           figlet "Github Actions..!"
       - name: Greetings..!
-        run: echo "Congratulations on your first workflow"
+        run: echo "Congratulations on your first workflow...!"
