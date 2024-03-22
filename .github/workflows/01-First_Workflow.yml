@@ -1,0 +1,13 @@
+name: first-workflow
+on: workflow_dispatch
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: first-step
+        run: |
+          echo "Display A Figlet"
+          sudo apt-get install figlet
+          figlet "Github Actions..!"
+      - name: Greetings..!
+        run: echo "Congratulations on your first workflow"
