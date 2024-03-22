@@ -1,0 +1,23 @@
+name: Events with Filter
+on:
+  push:
+    branches:
+      - main
+      - 'dev-*'
+    paths-ignore:
+      - '.github/workflows/*'
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+      - 'dev-*'
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output event data
+        run: echo "${{ toJSON(github.event) }}"
+      - name: End-Workflow
+        run: echo "Execution is completed"
