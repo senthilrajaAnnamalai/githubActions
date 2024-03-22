@@ -1,5 +1,5 @@
-name: first-workflow
-on: workflow_dispatch
+name: trigger-by-push
+on: [push]                  # Trigger on push
 jobs:
   first-job:
     runs-on: ubuntu-latest
@@ -9,5 +9,5 @@ jobs:
           echo "Display A Figlet"
           sudo apt-get install figlet
           figlet "Github Actions..!"
-      - name: Greetings..!
-        run: echo "Congratulations on your first workflow"
+      - name: End-Workflow
+        run: echo "Execution is completed"
