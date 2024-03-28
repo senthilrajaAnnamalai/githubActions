@@ -1,0 +1,21 @@
+name: job-failure
+on: workflow_dispatch
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Run a script
+        id: publish
+        run: |
+          mkdir docs
+          cd docs
+          sudo bash ${GITHUB_WORKSPACE}/sys_info_1.wsh > report.html   
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: sys-info-report
+          path: docs          
+      - name: End-Workflow
+        run: echo "Execution is completed" 
