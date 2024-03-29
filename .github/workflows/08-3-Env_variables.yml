@@ -1,11 +1,12 @@
-name: demo_secrets
+name: env_vars
 on: workflow_dispatch
 env:
   AWS_ACCESS_KEY_ID: ${{vars.AWS_ACCESS_KEY}}
-  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_KEY}}
+  AWS_SECRET_ACCESS_KEY: ${{vars.AWS_SECRET_KEY}}
   AWS_REGION: ${{vars.AWS_REGION}}
 jobs:
-  secrets-job:
+  env-job:
+    environment: demo
     runs-on: ubuntu-latest
     steps:
       - name: Install terraform
@@ -15,7 +16,7 @@ jobs:
          terraform -version
       - name: Display AWS creds
         run: |
-          echo "${{vars.AWS_REGION}}"
+          echo "${{ env.AWS_REGION}}"
           echo "${{ env.AWS_ACCESS_KEY_ID}}"
           echo "${{ env.AWS_SECRET_ACCESS_KEY}}"
       - name: Validate input
