@@ -1,0 +1,40 @@
+name: if-condition
+on: workflow_dispatch
+jobs:
+  condtional-job:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get OS info
+        id: osinfo
+        run: |
+          result=$(echo `head -n1 /etc/issue`)
+          echo "result=$result" >> $GITHUB_OUTPUT   
+      - name: Download TF
+        id: ver175
+        if: contains(steps.osinfo.outputs.result, 'Ubuntu 22.04') == true
+        run: |          
+          wget  https://releases.hashicorp.com/terraform/1.7.5/terraform_1.7.5_linux_amd64.zip
+      - name : Install Terraform
+        id: install175
+        if: (steps.ver175.outcome == 'success' && contains(steps.osinfo.outputs.result, 'Ubuntu 22.04') == true)
+        run : |
+          sudo unzip -o terraform_1.7.5_linux_amd64.zip -d /usr/local/bin
+          terraform -version
+      - name: Download TF 
+        id: ver165
+        if: contains(steps.osinfo.outputs.result, 'Ubuntu 22.04') != true
+        run: |          
+          wget  https://releases.hashicorp.com/terraform/1.6.5/terraform_1.6.5_linux_amd64.zip
+          sudo unzip -o terraform_1.6.5_linux_amd64.zip -d /usr/local/bin
+          terraform -version
+      - name : Install Terraform
+        id: install165
+        if: (steps.ver165.outcome == 'success' && contains(steps.osinfo.outputs.result, 'Ubuntu 22.04') != true)
+        run : |
+          sudo unzip -o terraform_1.6.5_linux_amd64.zip -d /usr/local/bin
+          terraform -version
+      - name : Display Message
+        if: (steps.install175.outcome == 'success' || steps.install165.outcome == 'success')
+        run : | 
+          echo "Terraform is successfully installed"
+          

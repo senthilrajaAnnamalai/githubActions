@@ -1,0 +1,21 @@
+name: container
+on: workflow_dispatch
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    container:
+      image: hashicorp/terraform:1.6
+    steps:
+     - name: Validate TF version
+       run: |
+         terraform -version
+     - name: Get base code
+       uses: actions/checkout@v3
+     - name: terraform initialize
+       run: |
+         cd ./terraform
+         terraform init
+         terraform fmt
+         terraform validate
+         cat main.tf

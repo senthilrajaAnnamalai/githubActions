@@ -1,0 +1,21 @@
+name: pyscript-custom
+on: workflow_dispatch
+jobs:
+  custom-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v3
+      - name: calculate subnet
+        id: subnet
+        uses: ./.github/actions/
+        with:
+          subnet: 10.0.0.0/21
+      - name: Output information
+        run: |
+          echo "networkAddress fetched ${{ steps.subnet.outputs.networkAddress}}"
+          echo "broadcastAddress fetched ${{ steps.subnet.outputs.broadcastAddress}}"
+          echo "subnetMask fetched ${{ steps.subnet.outputs.subnetMask}}"
+          echo "wildcardMask fetched ${{ steps.subnet.outputs.wildcardMask}}"
+          echo "firstIP fetched ${{ steps.subnet.outputs.firstIP}}"
+          echo "LastIP fetched ${{ steps.subnet.outputs.LastIP}}"

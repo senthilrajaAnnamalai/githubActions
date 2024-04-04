@@ -1,0 +1,83 @@
+name: 'Subnet Calculator'
+description: 'To calculate subnets for allocation'
+inputs:
+  subnet:
+    description: 'Enter subnet with mask'
+    required: false
+    default: 'true'
+outputs:
+  networkAddress:
+    description: 'networkAddress'
+    value: ${{ steps.result1.outputs.networkAddress }}
+  broadcastAddress:
+    description: 'broadcastAddress'
+    value: ${{ steps.result2.outputs.broadcastAddress }}
+  subnetMask:
+    description: 'subnetMask'
+    value: ${{ steps.result3.outputs.subnetMask }}
+  wildcardMask:
+    description: 'wildcardMask'
+    value: ${{ steps.result4.outputs.wildcardMask }}
+  firstIP:
+    description: 'firstIP'
+    value: ${{ steps.result5.outputs.firstIP }}
+  LastIP:
+    description: 'LastIP'
+    value: ${{ steps.result6.outputs.LastIP }}
+runs:
+  using: 'composite'
+  steps:
+      - name: checkout repo content
+        uses: actions/checkout@v2 # checkout the repository content to github runner.
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 #install the python needed
+      - name: execute py script # run the run.py to get the latest data
+        id: result
+        run: |
+          python subnet.py 10.0.0.0/21 > sub-result.txt
+          cat sub-result.txt
+        shell: bash
+      - name: networkAddress
+        id: result1
+        run: |
+          networkAddress=$(echo `sed -n '1 p' sub-result.txt`) 
+          echo "action out $networkAddress" 
+          echo "networkAddress=$networkAddress" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: broadcastAddress
+        id: result2
+        run: |
+          broadcastAddress=$(echo `sed -n '2 p' sub-result.txt`) 
+          echo "action out $broadcastAddress" 
+          echo "broadcastAddress=$broadcastAddress" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: subnetMask
+        id: result3
+        run: |
+          subnetMask=$(echo `sed -n '4 p' sub-result.txt`) 
+          echo "action out $subnetMask" 
+          echo "subnetMask=$subnetMask" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: wildcardMask
+        id: result4
+        run: |
+          wildcardMask=$(echo `sed -n '5 p' sub-result.txt`) 
+          echo "action out $wildcardMask" 
+          echo "wildcardMask=$wildcardMask" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: firstIP
+        id: result5
+        run: |
+          firstIP=$(echo `sed -n '6 p' sub-result.txt`) 
+          echo "action out $firstIP" 
+          echo "firstIP=$firstIP" >> $GITHUB_OUTPUT
+        shell: bash
+      - name: LastIP
+        id: result6
+        run: |
+          LastIP=$(echo `sed -n '7 p' sub-result.txt`) 
+          echo "action out $LastIP" 
+          echo "LastIP=$LastIP" >> $GITHUB_OUTPUT
+        shell: bash
