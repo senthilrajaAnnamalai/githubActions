@@ -7,6 +7,7 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: Run a script
+        continue-on-error: true
         id: publish
         run: |
           mkdir docs
