@@ -1,0 +1,22 @@
+name: matrix
+on: workflow_dispatch
+jobs:
+  matrix-job:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04]
+        version: [1.5.5, 1.6.5, 1.7.5]
+        include:
+          - os: ubuntu-20.04
+            version: 1.7.4
+        exclude:
+          - os: ubuntu-20.04
+            version: 1.7.5
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: TF Install
+        run: |
+          wget  https://releases.hashicorp.com/terraform/${{ matrix.version }}/terraform_${{ matrix.version }}_linux_amd64.zip
+          sudo unzip -o terraform_${{ matrix.version }}_linux_amd64.zip -d /usr/local/bin
+          terraform -version
+          
