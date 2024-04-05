@@ -7,6 +7,7 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
       - name: Run a script
+        continue-on-error: true
         id: result
         run: |
           sudo bash ${GITHUB_WORKSPACE}/sys_info_1.wsh > report.html
